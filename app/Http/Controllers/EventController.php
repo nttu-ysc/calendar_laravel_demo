@@ -16,6 +16,11 @@ class EventController extends Controller
      */
     public function index()
     {
+        $events = User::find(Auth::id())->events;
+        foreach ($events as $key => $event) {
+            $events[$key]['start_time'] = substr($event['start_time'], 0, 5);
+        }
+        return view('index', ['events' => $events]);
     }
 
     /**

@@ -46,6 +46,14 @@ for ($i = 0; $i < $backPadding; $i++) {
                 <?= $date ?>
             </div>
             <div class="events">
+                @foreach ($events as $event)
+                @if (($event->date == $date) && ($event->month == $month) && ($event->year == $year))
+                <div class="event clearfix" data-id="{{$event->id}}" data-from="{{$event->start_time}}">
+                    <div class="title">{{$event->title}}</div>
+                    <div class="from">{{$event->start_time}}</div>
+                </div>
+                @endif
+                @endforeach
             </div>
         </div>
         <?php endforeach ?>
