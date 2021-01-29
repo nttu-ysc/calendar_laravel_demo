@@ -1,10 +1,8 @@
 $(document).ready(function () {
-    var source = $('#event-template').html();
-    var eventTemplate = Handlebars.compile(source);
-    $.each(events, function (indexInArray, event) {
-        var eventUI = eventTemplate(event);
-        var date = event.date;
-        $('#calendar').find('.date-block[data-date="' + date + '"]').find('.events').append(eventUI);
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
     });
 
     var panel = {
