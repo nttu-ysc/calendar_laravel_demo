@@ -87,11 +87,14 @@ $(document).ready(function () {
             if ($(this).is('.create') || $(this).is('.update')) {
                 if ($(this).is('.create')) {
                     var action = '/events';
+                    var data = $(panel.el).find('form').serialize();
                 }
                 if ($(this).is('.update')) {
-                    var action = 'event/update.php';
+                    var id = $(panel.selectedEvent).data('id');
+                    var action = '/events/' + id;
+                    $(panel.el).find('form').append('<input type="hidden" name="_method" value="put">');
+                    var data = $(panel.el).find('form').serialize();
                 }
-                var data = $(panel.el).find('form').serialize();
                 $.post(action, data, "json")
                     .done(function (data, textStatus, jqXHR) {
                         location.reload();

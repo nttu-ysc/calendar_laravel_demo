@@ -52,9 +52,12 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+    public function update(StoreEvent $request, Event $event)
     {
-        //
+        $event->fill($request->all());
+        $event->save();
+        $event->start_time = substr($event->start_time, 0, 5);
+        return (['event' => $event]);
     }
 
     /**
