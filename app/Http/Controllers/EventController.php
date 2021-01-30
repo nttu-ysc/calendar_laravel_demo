@@ -40,6 +40,11 @@ class EventController extends Controller
         return (['event' => $event]);
     }
 
+    public function show(Event $event)
+    {
+        return (['event' => $event]);
+    }
+
     /**
      * Update the specified resource in storage.
      *

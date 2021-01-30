@@ -21,13 +21,14 @@ $(document).ready(function () {
                 $(panel.el).addClass('update').removeClass('new');
                 panel.selectedDateBlock = $(e.currentTarget).closest('.date-block');
                 var id = $(e.currentTarget).data('id');
-                $.post("event/read.php", { id: id },
+                $.get("/events/" + id, { id: id },
                     function (event, textStatus, jqXHR) {
-                        $('form').find('input[name="id"]').val(event.id);
-                        $('form').find('input[name="title"]').val(event.title);
-                        $('form').find('input[name="start_time"]').val(event.start_time);
-                        $('form').find('input[name="end_time"]').val(event.end_time);
-                        $('form').find('[name=description]').val(event.description);
+                        console.log(event);
+                        $('form').find('input[name="id"]').val(event.event.id);
+                        $('form').find('input[name="title"]').val(event.event.title);
+                        $('form').find('input[name="start_time"]').val(event.event.start_time);
+                        $('form').find('input[name="end_time"]').val(event.event.end_time);
+                        $('form').find('[name=description]').val(event.event.description);
                     },
                     "json"
                 ).fail(function (xhr) {

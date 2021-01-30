@@ -18,7 +18,7 @@ Route::get('/', [EventController::class, 'index'])
     ->middleware('auth');
 
 Route::resource('events', EventController::class)
-    ->only('index', 'store', 'update', 'destroy')
+    ->only('index', 'store', 'update', 'destroy', 'show')
     ->middleware('auth');
 
 
