@@ -113,7 +113,7 @@ $(document).ready(function () {
                 var result = confirm('Do you really want to delete this event?');
                 if (result) {
                     var id = panel.selectedEvent.data('id');
-                    $.post("event/delete.php", { id: id },
+                    $.post("/events/" + id, { _method: 'delete' },
                         function (data, textStatus, jqXHR) {
                             panel.selectedEvent.remove();
                             panel.close();
