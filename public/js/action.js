@@ -85,7 +85,7 @@ $(document).ready(function () {
         .on('click', 'button', function (e) {
             if ($(this).is('.create') || $(this).is('.update')) {
                 if ($(this).is('.create')) {
-                    var action = 'event/create.php';
+                    var action = '/events';
                 }
                 if ($(this).is('.update')) {
                     var action = 'event/update.php';
@@ -93,26 +93,13 @@ $(document).ready(function () {
                 var data = $(panel.el).find('form').serialize();
                 $.post(action, data, "json")
                     .done(function (data, textStatus, jqXHR) {
-                        if ($(e.currentTarget).is('.update')) {
-                            panel.selectedEvent.remove();
-                        }
-                        var eventUI = eventTemplate(data);
-                        panel.selectedDateBlock.find('.event').each(function (index, event) {
-                            var eventFromTime = $(event).data('from').split(':');
-                            var newEventFromTime = $(eventUI).data('from').split(':');
-                            if (eventFromTime[0] > newEventFromTime[0] || (eventFromTime[0] == newEventFromTime[0] && eventFromTime[1]) > newEventFromTime[1]) {
-                                $(event).before(eventUI);
-                                return false;
-                            }
-                        });
-                        if (panel.selectedDateBlock.find('.event[data-id="' + data.id + '"] ').length == 0) {
-                            panel.selectedDateBlock.find('.events').append(eventUI);
-                        }
-                        panel.close();
+                        location.reload();
                     })
                     .fail(function (xhr) {
-                        panel.showError(xhr.responseText);
-                        console.log();
+                        $.each(xhr.responseJSON.errors, function (index, error) {
+                            panel.showError(error);
+                        });
+                        console.log(xhr);
                     });
             }
             if ($(this).is('.cancel')) {

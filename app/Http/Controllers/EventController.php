@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEvent;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = User::find(Auth::id())->events;
+        $events = User::find(Auth::id())->events->sortBy('start_time');
         foreach ($events as $key => $event) {
             $events[$key]['start_time'] = substr($event['start_time'], 0, 5);
         }
@@ -29,9 +30,14 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEvent $request)
     {
-        //
+        $event = new Event;
+        $event->fill($request->all());
+        $event->user_id = Auth::id();
+        $event->save();
+        $event->start_time = substr($event->start_time, 0, 5);
+        return (['event' => $event]);
     }
 
     /**
