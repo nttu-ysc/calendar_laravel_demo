@@ -1,29 +1,5 @@
 @extends('layouts.frontend')
 
-@php
-
-$year = date('Y');
-$month = date('m');
-$days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-
-$firstDateOfTheMonth = new DateTime("$year-$month-1");
-$frontPadding = $firstDateOfTheMonth->format('w');
-$lastDateOfTheMonth = new DateTime("$year-$month-$days");
-$backPadding = 6 - $lastDateOfTheMonth->format('w');
-
-for ($i = 0; $i < $frontPadding; $i++) {
-    $dates[] = null;
-}
-
-for ($i = 1; $i <= $days; $i++) {
-    $dates[] = $i;
-}
-
-for ($i = 0; $i < $backPadding; $i++) {
-    $dates[] = null;
-}
-@endphp
-
 @section('calendar')
 <div id="calendar" data-year="<?= date('Y') ?>" data-month="<?= date('m') ?>">
     <div id="header">
