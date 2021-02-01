@@ -1,9 +1,9 @@
 @extends('layouts.frontend')
 
 @section('calendar')
-<div id="calendar" data-year="<?= date('Y') ?>" data-month="<?= date('m') ?>">
+<div id="calendar" data-year="{{$year}}" data-month="{{$month}}">
     <div id="header">
-        <?= date('Y') ?>/<?= date('m') ?>
+        {{$year}}/{{$month}}
     </div>
     <div id="days" class="clearfix">
         <div class="day">SUN</div>
@@ -16,23 +16,24 @@
     </div>
 
     <div id="date" class="clearfix" data-id="" data-from="">
-        <?php foreach ($dates as $key => $date) : ?>
-        <div class="date-block <?= (is_null($date)) ? 'empty' : '' ?>" data-date="<?= $date ?>">
+        @foreach ($dates as $key => $date)
+        <div class="date-block @if(!$date)empty @endif" @if($date) data-date="{{$date}}" @endif>
             <div class="date">
-                <?= $date ?>
+                {{$date}}
             </div>
             <div class="events">
                 @foreach ($events as $event)
-                @if (($event->date == $date) && ($event->month == $month) && ($event->year == $year))
-                <div class="event clearfix" data-id="{{$event->id}}" data-from="{{$event->start_time}}">
+                @if (($event->date == $date) && ($event->month == $month) &&
+                ($event->year == $year))
+                <div class="event clearfix" data-id="{{$event->id}}" data-from="{{$event->start_time->format('H:i')}}">
                     <div class="title">{{$event->title}}</div>
-                    <div class="from">{{$event->start_time}}</div>
+                    <div class="from">{{$event->start_time->format('H:i')}}</div>
                 </div>
                 @endif
                 @endforeach
             </div>
         </div>
-        <?php endforeach ?>
+        @endforeach
     </div>
 </div>
 @endsection

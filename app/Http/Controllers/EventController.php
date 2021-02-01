@@ -61,7 +61,6 @@ class EventController extends Controller
         $event->fill($request->all());
         $event->user_id = Auth::id();
         $event->save();
-        $event->start_time = substr($event->start_time, 0, 5);
         return (['event' => $event]);
     }
 
@@ -81,7 +80,6 @@ class EventController extends Controller
     {
         $event->fill($request->all());
         $event->save();
-        $event->start_time = substr($event->start_time, 0, 5);
         return (['event' => $event]);
     }
 
