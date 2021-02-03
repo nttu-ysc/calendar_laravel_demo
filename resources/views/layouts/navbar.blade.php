@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        @if (request()->is('Gcalendar'))
+        @if (request()->is('api/Gcalendar'))
         <a class="navbar-brand" href="/Gcalendar">Google Calendar</a>
         @else
         <a class="navbar-brand" href="index.php">Calendar</a>
