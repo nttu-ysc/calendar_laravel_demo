@@ -29,34 +29,38 @@ class GcalendarController extends Controller
      */
     public function index()
     {
-        $now = Carbon::now();
-        $year = $now->year;
-        $month = $now->month;
-        $day = $now->day;
-        $days_in_month = $now->daysInMonth;
-        $now->day = '01';
-        $frontPadding = $now->dayOfWeek;
-        $now->day = $days_in_month;
-        $backPadding = 6 - $now->dayOfWeek;
-        for ($i = 0; $i < $frontPadding; $i++) {
-            $dates[] = null;
-        }
-
-        for ($i = 1; $i <= $days_in_month; $i++) {
-            $dates[] = $i;
-        }
-
-        for ($i = 0; $i < $backPadding; $i++) {
-            $dates[] = null;
-        }
-
         session_start();
         if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
             $this->client->setAccessToken($_SESSION['access_token']);
+            $now = Carbon::now();
+            $year = $now->year;
+            $month = $now->month;
+            $day = $now->day;
+            $days_in_month = $now->daysInMonth;
+            $now->day = '01';
+            $frontPadding = $now->dayOfWeek;
+            $now->day = $days_in_month;
+            $backPadding = 6 - $now->dayOfWeek;
+            for ($i = 0; $i < $frontPadding; $i++) {
+                $dates[] = null;
+            }
+
+            for ($i = 1; $i <= $days_in_month; $i++) {
+                $dates[] = $i;
+            }
+
+            for ($i = 0; $i < $backPadding; $i++) {
+                $dates[] = null;
+            }
+
             $service = new Google_Service_Calendar($this->client);
 
             $calendarId = 'primary';
-            $results = $service->events->listEvents($calendarId);
+            $optParams = [
+                'orderBy' => 'startTime',
+                'singleEvents' => true,
+            ];
+            $results = $service->events->listEvents($calendarId, $optParams);
             $events = $results->getItems();
             foreach ($events as  $key => $event) {
                 if ($event['start']['date']) {
