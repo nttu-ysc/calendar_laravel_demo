@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\GcalendarController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,11 +20,6 @@ Route::get('/', [EventController::class, 'index'])
 Route::resource('events', EventController::class)
     ->only('index', 'store', 'update', 'destroy', 'show')
     ->middleware('auth');
-
-Route::resource('Gcalendar', GcalendarController::class)
-    ->except('create', 'edit');
-
-Route::get('oauth', [GcalendarController::class, 'oauth']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

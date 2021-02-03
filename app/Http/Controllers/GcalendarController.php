@@ -88,7 +88,7 @@ class GcalendarController extends Controller
             ]);
             // return $events;
         } else {
-            return redirect('/oauth');
+            return redirect()->route('oauthCallback');
         }
     }
 

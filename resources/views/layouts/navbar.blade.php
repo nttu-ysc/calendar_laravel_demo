@@ -7,13 +7,13 @@
         @endif
         <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNavDropdown">
             <ul class="navbar-nav ">
-                @if (request()->is('Gcalendar'))
+                @if (request()->is('api/Gcalendar'))
                 <li class="nav-item">
                     <a class="nav-link" href="/">Go To Calendar</a>
                 </li>
                 @else
                 <li class="nav-item">
-                    <a class="nav-link" href="/Gcalendar">Go To Google Calendar</a>
+                    <a class="nav-link" href="/api/Gcalendar">Go To Google Calendar</a>
                 </li>
                 @endif
                 @if (Auth::check())
