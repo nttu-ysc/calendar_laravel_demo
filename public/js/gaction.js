@@ -86,9 +86,8 @@ $(document).ready(function () {
         .on('click', 'button', function (e) {
             if ($(this).is('.create') || $(this).is('.update')) {
                 if ($(this).is('.create')) {
-                    var action = '/Gcalendar';
+                    var action = '/api/Gcalendar';
                     var data = $(panel.el).find('form').serialize();
-                    console.log(data);
                 }
                 if ($(this).is('.update')) {
                     var id = $(panel.selectedEvent).data('id');
@@ -96,16 +95,16 @@ $(document).ready(function () {
                     $(panel.el).find('form').append('<input type="hidden" name="_method" value="put">');
                     var data = $(panel.el).find('form').serialize();
                 }
-                // $.post(action, data, "json")
-                //     .done(function (data, textStatus, jqXHR) {
-                //         location.reload();
-                //     })
-                //     .fail(function (xhr) {
-                //         $.each(xhr.responseJSON.errors, function (index, error) {
-                //             panel.showError(error);
-                //         });
-                //         console.log(xhr);
-                //     });
+                $.post(action, data, "json")
+                    .done(function (data, textStatus, jqXHR) {
+                        location.reload();
+                    })
+                    .fail(function (xhr) {
+                        $.each(xhr.responseJSON.errors, function (index, error) {
+                            panel.showError(error);
+                        });
+                        console.log(xhr);
+                    });
             }
             if ($(this).is('.cancel')) {
                 panel.close();

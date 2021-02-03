@@ -120,6 +120,37 @@ class GcalendarController extends Controller
      */
     public function store(Request $request)
     {
+        session_start();
+        $start_time = $request->year . '-' . $request->month . '-' . $request->date . ' ' . $request->start_time;
+        $start_time = Carbon::createFromFormat('Y-n-j G:i', $start_time);
+        $start_time = $start_time->toRfc3339String();
+        $end_time = $request->year . '-' . $request->month . '-' . $request->date . ' ' . $request->end_time;
+        $end_time = Carbon::createFromFormat('Y-n-j G:i', $end_time);
+        $end_time = $end_time->toRfc3339String();
+
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+            $this->client->setAccessToken($_SESSION['access_token']);
+            $service = new Google_Service_Calendar($this->client);
+
+            $calendarId = 'primary';
+            $event = new Google_Service_Calendar_Event([
+                'summary' => $request->title,
+                'description' => $request->description,
+                'start' => [
+                    'dateTime' => $start_time,
+                ],
+                'end' => [
+                    'dateTime' => $end_time,
+                ],
+            ]);
+            $result = $service->events->insert($calendarId, $event);
+            if (!$result) {
+                return response()->json(['status' => 'error', 'message' => 'Something went wrong']);
+            }
+            return response()->json(['status' => 'success', 'message' => 'Event Created']);
+        } else {
+            return redirect()->route('oauthCallback');
+        }
     }
 
     /**
