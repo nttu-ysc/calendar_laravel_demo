@@ -121,12 +121,8 @@ class GcalendarController extends Controller
     public function store(Request $request)
     {
         session_start();
-        $start_time = $request->year . '-' . $request->month . '-' . $request->date . ' ' . $request->start_time;
-        $start_time = Carbon::createFromFormat('Y-n-j G:i', $start_time);
-        $start_time = $start_time->toRfc3339String();
-        $end_time = $request->year . '-' . $request->month . '-' . $request->date . ' ' . $request->end_time;
-        $end_time = Carbon::createFromFormat('Y-n-j G:i', $end_time);
-        $end_time = $end_time->toRfc3339String();
+        $start_time = Carbon::parse($request->year . '-' . $request->month . '-' . $request->date . ' ' . $request->start_time)->toRfc3339String();
+        $end_time = Carbon::parse($request->year . '-' . $request->month . '-' . $request->date . ' ' . $request->end_time)->toRfc3339String();
 
         if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
             $this->client->setAccessToken($_SESSION['access_token']);
@@ -167,10 +163,8 @@ class GcalendarController extends Controller
             $service = new Google_Service_Calendar($this->client);
             $event = $service->events->get('primary', $id);
 
-            $startTime = Carbon::create($event->start->dateTime);
-            $endTime = Carbon::create($event->end->dateTime);
-            $event->start->dateTime = $startTime->format('H:i');
-            $event->end->dateTime = $endTime->format('H:i');
+            $event->start->dateTime = Carbon::parse($event->start->dateTime)->format('H:i');
+            $event->end->dateTime = Carbon::parse($event->end->dateTime)->format('H:i');
             return ['event' => $event];
         } else {
             return redirect()->route('oauthCallback');
