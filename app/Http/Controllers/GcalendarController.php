@@ -161,7 +161,20 @@ class GcalendarController extends Controller
      */
     public function show($id)
     {
-        //
+        session_start();
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+            $this->client->setAccessToken($_SESSION['access_token']);
+            $service = new Google_Service_Calendar($this->client);
+            $event = $service->events->get('primary', $id);
+
+            $startTime = Carbon::create($event->start->dateTime);
+            $endTime = Carbon::create($event->end->dateTime);
+            $event->start->dateTime = $startTime->format('H:i');
+            $event->end->dateTime = $endTime->format('H:i');
+            return ['event' => $event];
+        } else {
+            return redirect()->route('oauthCallback');
+        }
     }
 
     /**
