@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEvent;
 use Carbon\Carbon;
 use Google_Client;
 use Google_Service_Calendar;
@@ -119,7 +120,7 @@ class GcalendarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEvent $request)
     {
         session_start();
         $start_time = Carbon::parse($request->year . '-' . $request->month . '-' . $request->date . ' ' . $request->start_time)->toRfc3339String();
@@ -179,7 +180,7 @@ class GcalendarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreEvent $request, $id)
     {
         session_start();
         if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {

@@ -35,7 +35,7 @@ class StoreEvent extends FormRequest
             'month' => 'required',
             'date' => 'required',
             'start_time' => 'required',
-            'end_time' => 'required',
+            'end_time' => 'required|after:start_time',
         ];
     }
 }
