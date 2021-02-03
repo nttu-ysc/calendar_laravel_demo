@@ -221,6 +221,18 @@ class GcalendarController extends Controller
      */
     public function destroy($id)
     {
-        //
+        session_start();
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+            $this->client->setAccessToken($_SESSION['access_token']);
+            $service = new Google_Service_Calendar($this->client);
+            $result = $service->events->delete('primary', $id);
+            if (!$result) {
+                return response()->json(['status' => 'error', 'message' => 'Something went wrong']);
+            } else {
+                return response()->json(['status' => 'success', 'data' => $result]);
+            }
+        } else {
+            return redirect()->route('oauthCallback');
+        }
     }
 }

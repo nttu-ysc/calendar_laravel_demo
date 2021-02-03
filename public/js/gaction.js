@@ -40,7 +40,7 @@ $(document).ready(function () {
             $(panel.el).addClass('open').css({
                 top: e.pageY + 'px',
                 left: e.pageX + 'px'
-            }).find('.title [contenteditable]').focus();
+            }).find('.title > input').focus();
         },
         close: function (e) {
             $(panel.el).removeClass('open');
@@ -112,7 +112,7 @@ $(document).ready(function () {
                 var result = confirm('Do you really want to delete this event?');
                 if (result) {
                     var id = panel.selectedEvent.data('id');
-                    $.post("/events/" + id, { _method: 'delete' },
+                    $.post("/api/Gcalendar/" + id, { _method: 'delete' },
                         function (data, textStatus, jqXHR) {
                             panel.selectedEvent.remove();
                             panel.close();
