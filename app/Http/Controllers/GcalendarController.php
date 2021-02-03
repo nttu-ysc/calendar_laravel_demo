@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
+use Google_Service_Calendar_EventDateTime;
 use Illuminate\Http\Request;
 
 class GcalendarController extends Controller
@@ -180,7 +181,36 @@ class GcalendarController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        session_start();
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+            $this->client->setAccessToken($_SESSION['access_token']);
+            $service = new Google_Service_Calendar($this->client);
+            $start_time = Carbon::parse($request->year . '-' . $request->month . '-' . $request->date . ' ' . $request->start_time)->toRfc3339String();
+            $end_time = Carbon::parse($request->year . '-' . $request->month . '-' . $request->date . ' ' . $request->end_time)->toRfc3339String();
+
+            $event = $service->events->get('primary', $id);
+            $event->setSummary($request->title);
+            $event->setDescription($request->description);
+
+            //start time
+            $start = new Google_Service_Calendar_EventDateTime();
+            $start->setDateTime($start_time);
+            $event->setStart($start);
+
+            //end time
+            $end = new Google_Service_Calendar_EventDateTime();
+            $end->setDateTime($end_time);
+            $event->setEnd($end);
+
+            $result = $service->events->update('primary', $id, $event);
+            if (!$result) {
+                return response()->json(['status' => 'error', 'message' => 'Something went wrong']);
+            } else {
+                return response()->json(['status' => 'success', 'data' => $result]);
+            }
+        } else {
+            return redirect()->route('oauthCallback');
+        }
     }
 
     /**

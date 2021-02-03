@@ -90,7 +90,7 @@ $(document).ready(function () {
                 }
                 if ($(this).is('.update')) {
                     var id = $(panel.selectedEvent).data('id');
-                    var action = '/events/' + id;
+                    var action = '/api/Gcalendar/' + id;
                     $(panel.el).find('form').append('<input type="hidden" name="_method" value="put">');
                     var data = $(panel.el).find('form').serialize();
                 }
